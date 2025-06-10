@@ -54,6 +54,7 @@ export default function App() {
       type: "answer",
       sdp: await sdpResponse.text(),
     };
+    console.info('answer: ', answer);
     await pc.setRemoteDescription(answer);
 
     peerConnection.current = pc;

@@ -58,6 +58,7 @@ function SessionActive({ stopSession, sendTextMessage }) {
       >
         send text
       </Button>
+      {/*<SpeechTranscription sendTextMessage={sendTextMessage} />*/} {/* Add SpeechTranscription */}
       <Button onClick={stopSession} icon={<CloudOff height={16} />}>
         disconnect
       </Button>

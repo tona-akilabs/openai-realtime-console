@@ -30,7 +30,7 @@ export default function App() {
       audio: true,
     });
     // Add audio track to RTCPeerConnection
-    ms.getAudioTracks().forEach((track) => pc.addTrack(track, ms));
+    pc.addTrack(ms.getAudioTracks()[0], ms)
 
     // Set up data channel for sending and receiving events
     const dc = pc.createDataChannel("events");
@@ -42,7 +42,7 @@ export default function App() {
     await pc.setLocalDescription(offer);
 
     const baseUrl = "https://api.openai.com/v1/realtime";
-    const model = "gpt-4o-realtime-preview-2025-06-03";
+    const model = "gpt-4o-realtime-preview-2024-12-17";
     const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
       method: "POST",
       body: offer.sdp,

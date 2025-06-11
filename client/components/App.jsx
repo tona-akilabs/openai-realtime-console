@@ -23,24 +23,26 @@ export default function App() {
     // Set up to play remote audio from the model
     audioElement.current = document.createElement("audio");
     audioElement.current.autoplay = true;
-    pc.ontrack = (e) => (audioElement.current.srcObject = e.streams[0]);
+    // pc.ontrack = (e) => (audioElement.current.srcObject = e.streams[0]);
 
     // Add local audio track for microphone input in the browser
     const ms = await navigator.mediaDevices.getUserMedia({
       audio: true,
     });
-    pc.addTrack(ms.getTracks()[0]);
+    // Add audio track to RTCPeerConnection
+    ms.getAudioTracks().forEach((track) => pc.addTrack(track, ms));
 
     // Set up data channel for sending and receiving events
-    const dc = pc.createDataChannel("oai-events");
+    const dc = pc.createDataChannel("events");
     setDataChannel(dc);
+    console.log("Data channel created:", dc.label);
 
     // Start the session using the Session Description Protocol (SDP)
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
 
     const baseUrl = "https://api.openai.com/v1/realtime";
-    const model = "gpt-4o-realtime-preview-2024-12-17";
+    const model = "gpt-4o-realtime-preview-2025-06-03";
     const sdpResponse = await fetch(`${baseUrl}?model=${model}`, {
       method: "POST",
       body: offer.sdp,
@@ -54,7 +56,6 @@ export default function App() {
       type: "answer",
       sdp: await sdpResponse.text(),
     };
-    console.info('answer: ', answer);
     await pc.setRemoteDescription(answer);
 
     peerConnection.current = pc;
@@ -129,6 +130,14 @@ export default function App() {
       // Append new server events to the list
       dataChannel.addEventListener("message", (e) => {
         const event = JSON.parse(e.data);
+        const { type, transcript } = event
+        // console.info('type: ', type)
+        if (type === "response.audio_transcript.done") {
+          console.info('final transcript: ', transcript);
+          // console.info('data: ', e.data)
+        } else if(type === "response.audio_transcript.partial") {
+          console.info('partial transcript: ', transcript);
+        }
         if (!event.timestamp) {
           event.timestamp = new Date().toLocaleTimeString();
         }

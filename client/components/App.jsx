@@ -53,7 +53,7 @@ export default function App() {
     });
 
     const answer = {
-      type: "answer",
+      type: "offer",
       sdp: await sdpResponse.text(),
     };
     await pc.setRemoteDescription(answer);
@@ -133,7 +133,7 @@ export default function App() {
         const { type, transcript } = event
         // console.info('type: ', type)
         if (type === "response.audio_transcript.done") {
-          console.info('final transcript: ', transcript);
+          console.info('transcript: ', transcript);
           // console.info('data: ', e.data)
         } else if(type === "response.audio_transcript.partial") {
           console.info('partial transcript: ', transcript);

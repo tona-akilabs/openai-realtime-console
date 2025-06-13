@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "node server2.js --dev",
+    "dev": "node ws.js --dev",
     "start": "node server2.js",
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",

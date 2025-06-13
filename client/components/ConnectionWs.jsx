@@ -192,25 +192,25 @@ export default function ConnectionWs() {
 
             // Convert decoded audio data to Float32Array
             const float32Array = decodedAudioData.getChannelData(0); // Get data for the first channel
-
+            setAudioChunks((prevChunks) => [...prevChunks, new Float32Array(float32Array)]);
             // Convert Float32Array to WAV format
             // const wavBuffer = encodeWAV(float32Array);
             // Downsample to 16kHz Int16 PCM
-            const pcm16 = downsampleTo16kHz(float32Array, decodedAudioData.sampleRate);
+            // const pcm16 = downsampleTo16kHz(float32Array, decodedAudioData.sampleRate);
             // Convert Int16Array to Uint8Array for sending raw bytes
-            const uint8pcm = new Uint8Array(pcm16.buffer);
-            appendAudioChunk(uint8pcm);
+            // const uint8pcm = new Uint8Array(pcm16.buffer);
+            // appendAudioChunk(uint8pcm);
             // const base64Audio = int16ToBase64(downsampled);
             // Send as raw buffer (not base64 — server can handle it as binary)
             // wsRef.current.send(pcm16.buffer);
             // If buffer ≥ 100ms, send it
-            if (audioBuffer.length >= 3200) {
+            /*if (audioBuffer.length >= 3200) {
               wsRef.current.send(audioBuffer.buffer); // Send raw bytes
               audioBuffer = new Uint8Array(0); // reset buffer
 
               // Send commit after sending append(s)
               // ws.send(JSON.stringify({ type: 'input_audio_buffer.commit' }));
-            }
+            }*/
           }
         }
       };
@@ -240,7 +240,7 @@ export default function ConnectionWs() {
   function stopSpeechToTextSession() {
     console.info('Stopping speech-to-text session...');
     console.info('Stopping audio processing session...');
-    if (mediaStreamSourceRef.current) {
+    /*if (mediaStreamSourceRef.current) {
       mediaStreamSourceRef.current.disconnect();
       mediaStreamSourceRef.current = null;
     }
@@ -252,9 +252,9 @@ export default function ConnectionWs() {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop());
       streamRef.current = null;
-    }
+    }*/
     if (wsRef.current && isConnected) {
-      const combinedChunks = audioChunks.reduce((acc, chunk) => {
+      /*const combinedChunks = audioChunks.reduce((acc, chunk) => {
         const temp = new Float32Array(acc.length + chunk.length);
         temp.set(acc);
         temp.set(chunk, acc.length);
@@ -266,7 +266,7 @@ export default function ConnectionWs() {
       appendAudioChunk(uint8pcm);
       wsRef.current.send(audioBuffer.buffer); // Send raw bytes
       // Commit after sending the buffer
-      wsRef.current.send(JSON.stringify({ type: 'input_audio_buffer.commit' }));
+      wsRef.current.send(JSON.stringify({ type: 'input_audio_buffer.commit' }));*/
       saveAudioFile();
     }
     setIsSessionActive(false);
@@ -403,7 +403,7 @@ export default function ConnectionWs() {
         </p>
       </div>
       <div className="flex gap-3 mb-6">
-        <Button onClick={startSession} disabled={isSessionActive || !isConnected}>
+        <Button onClick={startSpeechToTextSession()} disabled={isSessionActive || !isConnected}>
           Start Session
         </Button>
         <Button onClick={() => stopSpeechToTextSession()} disabled={!isSessionActive}>

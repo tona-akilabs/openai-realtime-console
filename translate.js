@@ -20,7 +20,7 @@ app.get("/languages", async (req, res) => {
       // content: "You are a helpful translation assistant."
       //"content": "You are a translation bot that formats all responses like: translatebot(language): translated text"
       body: JSON.stringify({
-        model: "gpt-4o",
+        model: "gpt-4o-mini", // gpt-4o || gpt-4o-mini
         messages: [
           { role: "system", content: "You are a translation bot that formats all responses like: translatebot(language): translated text" },
           { role: "user", content: prompt },

@@ -5,10 +5,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 const apiKey = process.env.OPENAI_API_KEY;
 
-app.get("/languages", async (req, res) => {
+app.get("/translate", async (req, res) => {
   try {
     const text = "Thank you for choosing our product.";
-    const targetLanguages = ["French", "German", "Japanese", "Thai"];
+    const targetLanguages = ["French", "German", "Japanese"];
     const prompt = `Translate the following sentence into these languages: ${targetLanguages.join(", ")}.\n\nSentence: "${text}"`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {

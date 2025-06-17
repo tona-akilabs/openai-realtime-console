@@ -8,7 +8,7 @@ const apiKey = process.env.OPENAI_API_KEY;
 app.get("/translate", async (req, res) => {
   try {
     const text = "Thank you for choosing our product.";
-    const targetLanguages = ["French", "German", "Japanese"];
+    const targetLanguages = ["French", "German", "Japanese", "khmer"];
     const prompt = `Translate the following sentence into these languages: ${targetLanguages.join(", ")}.\n\nSentence: "${text}"`;
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -20,7 +20,7 @@ app.get("/translate", async (req, res) => {
       // content: "You are a helpful translation assistant."
       //"content": "You are a translation bot that formats all responses like: translatebot(language): translated text"
       body: JSON.stringify({
-        model: "gpt-4o-mini", // gpt-4o || gpt-4o-mini
+        model: "gpt-4o", // gpt-4o || gpt-4o-mini
         messages: [
           { role: "system", content: "You are a translation bot that formats all responses like: translatebot(language): translated text" },
           { role: "user", content: prompt },

@@ -18,13 +18,12 @@ class MyAudioProcessor extends AudioWorkletProcessor {
 
   process(inputs, outputs, parameters) {
     // inputs[0] is an array of channels, and inputs[0][0] is the Float32Array for the first channel.
-    const inputChannelData = inputs[0][0];
+    const inputChannelData = inputs[0];
 
-    if (inputChannelData) {
-      // Send the raw Float32Array data back to the main thread
-      // Or process it (downsample, convert to PCM Int16) here
-      // and then send the processed data.
-      this.port.postMessage(inputChannelData.buffer, [inputChannelData.buffer]);
+    if (inputChannelData.length > 0) {
+      // Take first channel
+      const channelData = inputChannelData[0];
+      this.port.postMessage(channelData.slice(0));
     }
 
     // Return true to keep the processor alive

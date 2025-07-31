@@ -7,7 +7,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
 import "dotenv/config";
-import { printMessage } from "./helpers.js";
+import { formatSeconds, printMessage } from "./helpers.js";
 
 const app = express();
 const port = process.env.PORT || 8080;
@@ -109,6 +109,10 @@ const initWebSocket = (url, onOpen) => {
     // All the messages we are sending are in JSON format
     const message = JSON.parse(event.data.toString());
     console.log(message);
+    if (message.type === "transcript" && message.data.is_final) {
+      const { text, start, end, language } = message.data.utterance;
+      console.log(`${formatSeconds(start)} --> ${formatSeconds(end)} | ${language} | ${text.trim()}`);
+    }
     printMessage(message);
   });
 

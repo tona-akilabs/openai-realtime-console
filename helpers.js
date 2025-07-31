@@ -27,7 +27,7 @@ function extractDurationFromDurationInMs(durationInMs) {
     milliseconds,
   };
 }
-function formatSeconds(duration) {
+export function formatSeconds(duration) {
   if (duration == null ||
     Number.isNaN(duration) ||
     !Number.isFinite(duration)) {
